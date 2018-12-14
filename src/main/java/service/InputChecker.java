@@ -1,40 +1,29 @@
 package service;
 
 import java.io.File;
+import java.nio.file.NoSuchFileException;
+
+import static constants.Constants.EXTENSION;
 
 public class InputChecker {
 
-    private static final String EXTENSION = "txt";
-
     public void verifyCmdInput(String[] args) {
-        if (!verifyFirstParameter(args[0])) {
+        File file = new File(args[0]);
+//        if (!(file.exists()) || !(file.isFile())) {
+//            System.out.printf("You had to enter path to file with instructions as first parameter. Such file doesn't exist - %s%n", args[0]);
+//            System.exit(-1);
+//        }
+        if (!(args[0].regionMatches(true,args[0].length()-4, EXTENSION,0,4))) {
+            System.out.println("You had to enter path to file with 'txt' extension");
             return;
         }
-    }
-
-    private String getFileExtension(String pathToFile) {
-        String extensionOfInputtedFile = null;
-        int position = pathToFile.lastIndexOf(".");
-        if (position > 0) {
-            extensionOfInputtedFile = pathToFile.substring(position);
+        if (file.length() == 0) {
+            System.out.printf("This file is empty - %s%n", args[0]);
+            return;
         }
-        return extensionOfInputtedFile;
-    }
-
-    private boolean verifyFirstParameter(String path) {
-        File file = new File(path);
-        if (!(file.isFile()) && (file.canRead())) {
-            System.out.println("You had to enter path to file with instructions as first parameter. Such file doesn't exist - " + path);
-            return false;
+        if (!file.canRead()) {
+            System.out.printf("Can't read this file - %s%n", args[0]);
+            return;
         }
-        if (getFileExtension(path).equalsIgnoreCase(EXTENSION)) {
-            System.out.println("You had to enter path to file with 'txt' extension. Extension of your file - " + getFileExtension(path));
-            return false;
-        }
-        if (file.length()==0) {
-            System.out.println("This file is empty - " + path);
-            return false;
-        }
-        return true;
     }
 }

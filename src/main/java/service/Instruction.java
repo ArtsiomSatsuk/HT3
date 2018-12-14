@@ -26,7 +26,7 @@ public class Instruction {
 
     @Override
     public String toString() {
-        return getTimeout() == null ? "[" + firstCommand + " \"" + secondCommand + "\"] "
-                : "[" + firstCommand + " \"" + secondCommand + "\" \"" + thirdCommand + "\"] ";
+        return getTimeout() == null ? String.format("[%s \"%s\"] ", firstCommand, secondCommand)
+                : String.format("[%s \"%s\" \"%s\"] ", firstCommand, secondCommand, thirdCommand);
     }
 }

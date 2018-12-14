@@ -27,7 +27,6 @@ public class InstructionsHandler {
         patterns.add(checkPageContainsPattern);
     }
 
-
     private String[] separateCommands(String instrString) throws IncorrectInstructionException {
         String[] separatedInstr = new String[3];
         putPatternsInCollection();
@@ -45,38 +44,40 @@ public class InstructionsHandler {
         return separatedInstr;
     }
 
+    private Timer timer = new  Timer();
     private UrlOpener urlOpener = new UrlOpener();
     private PageChecker pageChecker = new PageChecker();
     private Document page = null;
 
     public void performInstructions(String instrString) throws IOException, UnknownHostException, SocketTimeoutException {
+
         Instruction instruction = new Instruction(separateCommands(instrString));
 
         switch (instruction.getFirstCommand()) {
             case "open":
-                Timer.start();
+                timer.start();
                 page = urlOpener.openUrl(instruction);
-                Timer.stop(instruction);
+                timer.stop(instruction);
                 break;
             case "checkLinkPresentByHref":
-                Timer.start();
+                timer.start();
                 pageChecker.checkLinkPresentByHref(instruction, page);
-                Timer.stop(instruction);
+                timer.stop(instruction);
                 break;
             case "checkLinkPresentByName":
-                Timer.start();
+                timer.start();
                 pageChecker.checkLinkPresentByName(instruction, page);
-                Timer.stop(instruction);
+                timer.stop(instruction);
                 break;
             case "checkPageTitle":
-                Timer.start();
+                timer.start();
                 pageChecker.checkPageTitle(instruction, page);
-                Timer.stop(instruction);
+                timer.stop(instruction);
                 break;
             case "checkPageContains":
-                Timer.start();
+                timer.start();
                 pageChecker.checkPageContains(instruction, page);
-                Timer.stop(instruction);
+                timer.stop(instruction);
                 break;
         }
     }
