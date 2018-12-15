@@ -14,7 +14,11 @@ public class Instruction {
         return secondCommand;
     }
 
-    public String getTimeout() {
+    public int getTimeout() {
+        return (int) (Double.parseDouble(getThirdCommand()) * 1000);
+    }
+
+    public String getThirdCommand() {
         return thirdCommand;
     }
 
@@ -26,7 +30,7 @@ public class Instruction {
 
     @Override
     public String toString() {
-        return getTimeout() == null ? String.format("[%s \"%s\"] ", firstCommand, secondCommand)
+        return getThirdCommand() == null ? String.format("[%s \"%s\"] ", firstCommand, secondCommand)
                 : String.format("[%s \"%s\" \"%s\"] ", firstCommand, secondCommand, thirdCommand);
     }
 }

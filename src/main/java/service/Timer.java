@@ -1,12 +1,11 @@
 package service;
 
+import static constants.Constants.LINE_SEP;
 import static service.LogWriter.logBuffer;
 
 public class Timer {
 
     public static double timeBuffer = 0;
-
-    private String lineSep = System.getProperty("line.separator");
 
     private long startTime = 0;
 
@@ -19,10 +18,10 @@ public class Timer {
         timeBuffer += duration;
         startTime = 0;
         if (TestResult.status) {
-            logBuffer.append(lineSep).append("+").append(instruction).append(duration);
+            logBuffer.append(LINE_SEP).append("+").append(instruction).append(duration);
             TestResult.passed++;
         } else {
-            logBuffer.append(lineSep).append("!").append(instruction).append(duration);
+            logBuffer.append(LINE_SEP).append("!").append(instruction).append(duration);
             TestResult.failed++;
         }
         TestResult.status = true;

@@ -49,7 +49,7 @@ public class InstructionsHandler {
     private PageChecker pageChecker = new PageChecker();
     private Document page = null;
 
-    public void performInstructions(String instrString) throws IOException, UnknownHostException, SocketTimeoutException {
+    public void performInstructions(String instrString) throws IOException, UnknownHostException, IncorrectInstructionException {
 
         Instruction instruction = new Instruction(separateCommands(instrString));
 
