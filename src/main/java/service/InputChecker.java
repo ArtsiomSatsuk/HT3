@@ -1,33 +1,34 @@
 package service;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-import static constants.Constants.EXTENSION;
+import static constants.Constants.*;
 
 public class InputChecker {
 
 
-    public boolean verifyCmdInput(String[] args) {
+    public void verifyCmdInput(String[] args) throws IOException {
         StringBuilder inputAssert = new StringBuilder();
-        Path path = Paths.get(args[0]);
-        if (Files.isDirectory(path)) {
-            inputAssert.append(String.format("You had to specify path to file with instructions as first parameter. You entered path to directory - %s%n", path));
+        Path pathToInstructions = Paths.get(args[0]);
+        if (Files.isDirectory(pathToInstructions)) {
+            inputAssert.append(String.format(INSTR_FILE_IS_DIRECTORY_MSG, pathToInstructions));
         }
-        if (!(args[0].regionMatches(true, args[0].length() - 4, EXTENSION, 0, 4))) {
-            inputAssert.append("You had to specify path to file with 'txt' extension\n");
+//        if (Files.size(pathToInstructions)==0){
+//            inputAssert.append(String.format(EMPTY_FILE_MSG, pathToInstructions));
+//        }
+        if (!(args[0].regionMatches(true, args[0].length() - 4, REQUIRED_EXTENSION, 0, 4))) {
+            inputAssert.append(WRONG_EXTENSION_MSG);
         }
-        if (!Files.isReadable(path)){
-            inputAssert.append(String.format("Can't read this file - %s%n", path));
+        if (!Files.isReadable(pathToInstructions)) {
+            inputAssert.append(String.format(FILE_IS_NOT_READABLE, pathToInstructions));
         }
-        if (Files.notExists(path)){
-            inputAssert.append(String.format("Such file doesn't exist - %s%n", path));
-        }
-        if (!inputAssert.toString().equals("")){
+        if (!inputAssert.toString().equals("")) {
             System.out.println(inputAssert.toString());
-            return false;
+//            return false;
         }
-        return true;
+//        return true;
     }
 }

@@ -4,7 +4,6 @@ import exceptions.IncorrectInstructionException;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class InstructionsHandler {
         return separatedInstr;
     }
 
-    private Timer timer = new  Timer();
+    private ResultsRecorder recorder = new ResultsRecorder();
     private UrlOpener urlOpener = new UrlOpener();
     private PageChecker pageChecker = new PageChecker();
     private Document page = null;
@@ -55,29 +54,29 @@ public class InstructionsHandler {
 
         switch (instruction.getFirstCommand()) {
             case "open":
-                timer.start();
+                recorder.start();
                 page = urlOpener.openUrl(instruction);
-                timer.stop(instruction);
+                recorder.stop(instruction);
                 break;
             case "checkLinkPresentByHref":
-                timer.start();
+                recorder.start();
                 pageChecker.checkLinkPresentByHref(instruction, page);
-                timer.stop(instruction);
+                recorder.stop(instruction);
                 break;
             case "checkLinkPresentByName":
-                timer.start();
+                recorder.start();
                 pageChecker.checkLinkPresentByName(instruction, page);
-                timer.stop(instruction);
+                recorder.stop(instruction);
                 break;
             case "checkPageTitle":
-                timer.start();
+                recorder.start();
                 pageChecker.checkPageTitle(instruction, page);
-                timer.stop(instruction);
+                recorder.stop(instruction);
                 break;
             case "checkPageContains":
-                timer.start();
+                recorder.start();
                 pageChecker.checkPageContains(instruction, page);
-                timer.stop(instruction);
+                recorder.stop(instruction);
                 break;
         }
     }

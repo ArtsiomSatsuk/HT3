@@ -7,14 +7,16 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
-import static constants.Constants.EXPIRED_TIMEOUT_MSG;
+import static constants.Constants.LINE_SEP;
 import static constants.Constants.NO_SPECIFIED_TIMEOUT_MSG;
+import static constants.Constants.WRONG_TIMEOUT_MSG;
+import static service.LogWriter.logBuffer;
 
 public class UrlOpener {
 
     protected Document openUrl(Instruction instr) throws IOException, UnknownHostException {
         if (instr.getThirdCommand() == null) {
-            System.out.println(NO_SPECIFIED_TIMEOUT_MSG);
+            logBuffer.append(LINE_SEP).append(NO_SPECIFIED_TIMEOUT_MSG);
             return openUrlWithoutSpecifiedTimeout(instr);
         } else return openUrlWithSpecifiedTimeout(instr);
     }
@@ -25,32 +27,33 @@ public class UrlOpener {
         } catch (IllegalArgumentException e) {
             return Jsoup.connect("http://" + instr.getSecondCommand()).get();
         } catch (SocketTimeoutException e) {
-            TestResult.status = false;
-            System.err.println(EXPIRED_TIMEOUT_MSG);
+            ResultsRecorder.status = false;
             return Jsoup.connect(instr.getSecondCommand()).get();
         }
     }
 
-    private Document openUrlWithSpecifiedTimeout(Instruction instr) throws IOException, UnknownHostException  {
+    private Document openUrlWithSpecifiedTimeout(Instruction instr) throws IOException, UnknownHostException {
         try {
-            return Jsoup.connect(instr.getSecondCommand()).timeout(instr.getTimeout()).get();
-        }catch (IllegalArgumentException e) {
+            if (instr.getTimeout()<=0){
+                logBuffer.append(LINE_SEP).append(WRONG_TIMEOUT_MSG);
+                return openUrlWithoutSpecifiedTimeout(instr);
+            }else {
+                return Jsoup.connect(instr.getSecondCommand()).timeout(instr.getTimeout()).get();
+            }
+        } catch (IllegalArgumentException e) {
             return openUrlWithAddingProtocol(instr);
-        }
-        catch (SocketTimeoutException e) {
-            TestResult.status = false;
-            System.out.println(EXPIRED_TIMEOUT_MSG);
+        } catch (SocketTimeoutException e) {
+            ResultsRecorder.status = false;
             return Jsoup.connect(instr.getSecondCommand()).get();
         }
     }
 
     private Document openUrlWithAddingProtocol(Instruction instr) throws IOException, UnknownHostException {
         try {
-            return Jsoup.connect("http://"+instr.getSecondCommand()).timeout(instr.getTimeout()).get();
+            return Jsoup.connect("http://" + instr.getSecondCommand()).timeout(instr.getTimeout()).get();
         } catch (SocketTimeoutException e) {
-            TestResult.status = false;
-            System.out.println(EXPIRED_TIMEOUT_MSG);
-            return Jsoup.connect("http://"+instr.getSecondCommand()).get();
+            ResultsRecorder.status = false;
+            return Jsoup.connect("http://" + instr.getSecondCommand()).get();
         }
     }
 }

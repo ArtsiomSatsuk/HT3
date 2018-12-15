@@ -3,7 +3,12 @@ package service;
 import static constants.Constants.LINE_SEP;
 import static service.LogWriter.logBuffer;
 
-public class Timer {
+public class ResultsRecorder {
+
+    public static boolean status = true;
+
+    public static int passed = 0;
+    public static int failed = 0;
 
     public static double timeBuffer = 0;
 
@@ -17,14 +22,14 @@ public class Timer {
         double duration = getDuration();
         timeBuffer += duration;
         startTime = 0;
-        if (TestResult.status) {
+        if (ResultsRecorder.status) {
             logBuffer.append(LINE_SEP).append("+").append(instruction).append(duration);
-            TestResult.passed++;
+            ResultsRecorder.passed++;
         } else {
             logBuffer.append(LINE_SEP).append("!").append(instruction).append(duration);
-            TestResult.failed++;
+            ResultsRecorder.failed++;
         }
-        TestResult.status = true;
+        ResultsRecorder.status = true;
     }
 
     private double getDuration() {
