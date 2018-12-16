@@ -16,12 +16,12 @@ public class LogWriter {
 
     public static StringBuilder logBuffer = new StringBuilder();
 
-    private Charset charset = Charset.forName("windows-1251");
+    private Charset charset = Charset.forName(CHARSET_NAME);
 
     public void writeResult(String pathToLogFile, String pathToInstructions) throws IOException {
         Path outputLog = Paths.get(pathToLogFile);
         if (!checkSpecifiedPathToLog(pathToLogFile)) {
-            System.out.println("Path to log file will be changed");
+            System.out.println(CHANGING_PATH_MSG);
             outputLog = Paths.get(DEFAULT_LOG_PATH);
         }
         if (Files.notExists(outputLog) || (!Files.isRegularFile(outputLog))) {
@@ -34,7 +34,7 @@ public class LogWriter {
             output.write("File with instructions - " + pathToInstructions);
             output.write(logBuffer.toString());
             if (Files.isRegularFile(outputLog) && Files.exists(outputLog)) {
-                System.out.printf(NEW_LOG_FILE_MSG, outputLog);
+                System.out.printf(NEW_LOG_FILE_MSG, pathToInstructions, outputLog);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -45,13 +45,13 @@ public class LogWriter {
         StringBuilder logAssert = new StringBuilder();
         Path path = Paths.get(pathToLogFile);
         if (Files.isDirectory(path)) {
-            logAssert.append("Specified path to log file is a directory - ").append(path).append(LINE_SEP);
+            logAssert.append(LOG_IS_DIRECTORY).append(path).append(LINE_SEP);
         }
         if (!Files.isWritable(path) && (Files.isRegularFile(path))) {
-            logAssert.append("Can't write in this file - ").append(path).append(LINE_SEP);
+            logAssert.append(FILE_IS_NOT_WRITABLE).append(path).append(LINE_SEP);
         }
         if (!(pathToLogFile.regionMatches(true, pathToLogFile.length() - 4, REQUIRED_EXTENSION, 0, 4))) {
-            logAssert.append("You supposed to specify path to log file with 'txt' extension - ").append(path);
+            logAssert.append(WRONG_LOG_EXTENSION_MSG).append(path);
         }
         if (!logAssert.toString().matches("\\s*")) {
             System.out.println(logAssert.toString());

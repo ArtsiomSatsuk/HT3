@@ -1,6 +1,7 @@
 package service;
 
 import exceptions.IncorrectInstructionException;
+import exceptions.NullPageException;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
@@ -48,7 +49,8 @@ public class InstructionsHandler {
     private PageChecker pageChecker = new PageChecker();
     private Document page = null;
 
-    public void performInstructions(String instrString) throws IOException, UnknownHostException, IncorrectInstructionException {
+    public void performInstructions(String instrString) throws IOException, UnknownHostException, IncorrectInstructionException,
+            NullPageException {
 
         Instruction instruction = new Instruction(separateCommands(instrString));
 

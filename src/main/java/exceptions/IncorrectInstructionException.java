@@ -1,6 +1,8 @@
 package exceptions;
 
-public class IncorrectInstructionException extends RuntimeException{
+import static constants.Constants.INCORRECT_INSTRUCTION_MSG;
+
+public class IncorrectInstructionException extends Exception {
 
     private String name;
 
@@ -9,7 +11,6 @@ public class IncorrectInstructionException extends RuntimeException{
     }
 
     public String getMessage() {
-        return "[There is no such command. - " + name+"]\nUse the following example: \nopen \"http:www.google.com\" \"3\"" +
-                "\ncheckPageTitle \"Google Search Page\" \ncheckPageContains \"The best search engine\"";
+        return String.format(INCORRECT_INSTRUCTION_MSG, name);
     }
 }

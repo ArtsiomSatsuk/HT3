@@ -7,9 +7,7 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
-import static constants.Constants.LINE_SEP;
-import static constants.Constants.NO_SPECIFIED_TIMEOUT_MSG;
-import static constants.Constants.WRONG_TIMEOUT_MSG;
+import static constants.Constants.*;
 import static service.LogWriter.logBuffer;
 
 public class UrlOpener {
@@ -18,7 +16,8 @@ public class UrlOpener {
         if (instr.getThirdCommand() == null) {
             logBuffer.append(LINE_SEP).append(NO_SPECIFIED_TIMEOUT_MSG);
             return openUrlWithoutSpecifiedTimeout(instr);
-        } else return openUrlWithSpecifiedTimeout(instr);
+        }
+        return openUrlWithSpecifiedTimeout(instr);
     }
 
     private Document openUrlWithoutSpecifiedTimeout(Instruction instr) throws IOException, UnknownHostException {
@@ -34,10 +33,10 @@ public class UrlOpener {
 
     private Document openUrlWithSpecifiedTimeout(Instruction instr) throws IOException, UnknownHostException {
         try {
-            if (instr.getTimeout()<=0){
+            if (instr.getTimeout() <= 0) {
                 logBuffer.append(LINE_SEP).append(WRONG_TIMEOUT_MSG);
                 return openUrlWithoutSpecifiedTimeout(instr);
-            }else {
+            } else {
                 return Jsoup.connect(instr.getSecondCommand()).timeout(instr.getTimeout()).get();
             }
         } catch (IllegalArgumentException e) {

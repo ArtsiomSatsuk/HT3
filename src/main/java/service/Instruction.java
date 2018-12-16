@@ -14,12 +14,12 @@ public class Instruction {
         return secondCommand;
     }
 
-    public int getTimeout() {
-        return (int) (Double.parseDouble(getThirdCommand()) * 1000);
-    }
-
     public String getThirdCommand() {
         return thirdCommand;
+    }
+
+    public int getTimeout() {
+        return (int) (Double.parseDouble(getThirdCommand()) * 1000);
     }
 
     public Instruction(String[] instructions) {
